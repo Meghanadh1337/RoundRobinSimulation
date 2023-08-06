@@ -1,0 +1,65 @@
+#include<stdio.h>
+#include<unistd.h>
+int main()
+{
+int tt[3],wt[3];
+int arrival_time[3]={0,0,0};
+int burst_time[3]={3,6,9};
+int bt[3]={3,6,9};
+int tq=5;
+float average_wait_time, average_turnaround_time;
+int c=3;
+char name[3][10]={"stop","go","wait"};
+
+int i=0;
+printf("start of signal\n");
+int cur=0;
+while(c!=0)
+{
+  if(burst_time[i]>0)
+   {
+   if(burst_time[i]<tq)
+        { sleep(burst_time[i]);
+          cur=cur+burst_time[i];
+          tt[i]=cur;
+        }
+    else
+        { sleep(tq);
+          cur=cur+tq;
+        }
+   printf("%s\n",name[i]);
+   burst_time[i]=burst_time[i]-tq;
+   if(burst_time[i]<0)
+        { c--;
+        }
+   }
+   i=(i+1)%3;
+
+}
+
+
+printf("\nend of signal\n");
+printf("stop\tgo\twait\n");
+float tt_av,wt_av;
+tt_av=wt_av=0;
+for(int i=0;i<3;i++)
+{
+  tt_av+=tt[i];
+  wt[i]=tt[i]-bt[i];
+  wt_av+=wt[i];
+}
+
+
+printf("\nWait time\t");
+for(int i=0;i<3;i++)
+  printf("%d\t",wt[i]);
+
+printf("\nTurnaround time:\t");
+for(int i=0;i<3;i++)
+{  printf("%d\t",tt[i]); };
+printf("\n");
+tt_av=tt_av/3;
+wt_av/=3;
+printf("\n%f is Average turnaround time",tt_av);
+printf("\n%f is Average waiting time",wt_av);
+}
